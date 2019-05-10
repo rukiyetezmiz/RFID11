@@ -1,0 +1,103 @@
+#include <SPI.h>
+#include <RFID.h>
+RFID rfid(10, 9);
+int s0;
+int s1;
+int s2;
+int s3;
+int s4;
+void setup()
+{ 
+Serial.begin(9600); 
+SPI.begin(); 
+rfid.init();
+pinMode(A0,OUTPUT);
+pinMode(A1,OUTPUT);
+}
+
+void loop()
+{
+if (rfid.isCard()) {
+
+if (rfid.readCardSerial()) {
+
+Serial.println("Kart Bulundu ID : ");
+Serial.print(rfid.serNum[0]);
+Serial.print(" , ");
+Serial.print(rfid.serNum[1]);
+Serial.print(" , ");
+Serial.print(rfid.serNum[2]);
+Serial.print(" , ");
+Serial.print(rfid.serNum[3]);
+Serial.print(" , ");
+Serial.print(rfid.serNum[4]);
+Serial.println(" ");
+s0=rfid.serNum[0];
+s1=rfid.serNum[1];
+s2=rfid.serNum[2];
+s3=rfid.serNum[3];
+s4=rfid.serNum[4];
+if(s0==59&&s1==210&&s2==104&&s3==31&&s4==158){
+digitalWrite(A1,0);
+digitalWrite(A0,1);
+delay(2000);
+digitalWrite(A1,0);
+digitalWrite(A0,0);
+}
+else{
+digitalWrite(A1,1);
+digitalWrite(A0,0);
+delay(2000);
+digitalWrite(A1,0);
+digitalWrite(A0,0);
+}
+}
+}
+}
+
+ 
+
+ 
+
+Çift Kart Okutma :
+
+ 
+
+#include <SPI.h>
+#include <RFID.h>
+RFID rfid(7, 10);
+RFID rfid1(8, 9);
+
+void setup()
+{ 
+Serial.begin(9600); 
+SPI.begin(); 
+rfid.init();
+rfid1.init();
+pinMode(22,OUTPUT);
+pinMode(23,OUTPUT);
+}
+
+void loop()
+{
+
+if (rfid1.isCard()) { // RFID Kart Okumaişlemi ....
+digitalWrite(22,1);
+}
+if (!(rfid1.isCard())) { // RFID Kart Okumaişlemi ....
+digitalWrite(22,0);
+}
+if (rfid1.isCard()) { // RFID Kart Okumaişlemi ....
+digitalWrite(22,1);
+}
+if (rfid.isCard()) { // RFID Kart Okumaişlemi ....
+digitalWrite(23,1);
+}
+if (!(rfid.isCard())) { // RFID Kart Okumaişlemi ....
+digitalWrite(23,0);
+}
+if (rfid.isCard()) { // RFID Kart Okumaişlemi ....
+digitalWrite(23,1);
+}
+
+}
